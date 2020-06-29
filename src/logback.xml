@@ -1,6 +1,6 @@
 <configuration>
     
-    <property name="HOME_LOG" value="logs/appMonitor.log" />
+    <property name="HOME_LOG" value="/opt/logMonitor/appMonitor.log" />
     
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -25,11 +25,11 @@
         
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>$logs/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>/opt/logMonitor/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!-- por cada 10 mb genera un log -->
             <maxFileSize>10MB</maxFileSize>
             <!--El historial maximo sera de 30 dias para estar almacenando informacion del  logs-->
-            <maxHistory>30</maxHistory>
+            <maxHistory>3</maxHistory>
             <!--total de espacio para almacenamiento para guardar logs-->
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
@@ -38,20 +38,9 @@
             <pattern>%d %p %c{1.}  [%t] %m%n</pattern>
         </encoder>
     </appender> 
- 
-    <!--definimos el logger para un paquete especifico-->
-    <!--<logger name="com.bitlab.utilidades" level="warn" additivity="false"> VEREMOS SOLO ERRORES DE NIVEL SUPERIOR A WARN EN LOS LOGS-->
-    <logger name="com.bitlab.entidades" level="error" additivity="false">
-        <!--aqui se pone el nombre de los appender definidos arriba-->
-        <appender-ref ref="FILE_ROLLING"/> 
-        <!--        <appender-ref ref="CONSOLE"/> -->
-        <!--<appender-ref ref="FILE" />-->
-    </logger> 
     
     <!--el resto de paquetes seran analizados como nivel debug-->
     <root level="debug">
         <appender-ref ref="FILE_ROLLING"/>
-        <!--<appender-ref ref="FILE"/>-->
-        <!--        <appender-ref ref="CONSOLE"/>-->
     </root>
 </configuration>
