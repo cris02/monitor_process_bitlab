@@ -1,6 +1,6 @@
 <configuration>
     
-    <property name="HOME_LOG" value="/opt/logMonitor/appMonitor.log" />
+    <property name="HOME_LOG" value="/opt/aguilar/logMonitor/appMonitor.log" />
     
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -25,7 +25,7 @@
         
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>/opt/logMonitor/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>/opt/aguilar/logMonitor/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!-- por cada 10 mb genera un log -->
             <maxFileSize>10MB</maxFileSize>
             <!--El historial maximo sera de 30 dias para estar almacenando informacion del  logs-->
