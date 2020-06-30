@@ -5,13 +5,13 @@
  */
 package com.bitlab.procesos;
 
+import com.bitlab.monitor.SystemInfo;
 import com.bitlab.propiedades.ConfigProperties;
 import com.bitlab.utilidades.EncriptacionTexto;
 import java.io.IOException;
 import java.util.Properties;
-import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail.HtmlEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class MonitorProcess {
             LOGGER.debug("Propiedades cargadas exitosamente");
             
             LOGGER.debug("Enviando el correo electronico con la informacion");
-            enviarCorreo(sys.info(), propertiesSys);
+            enviarCorreo(sys.Info(), propertiesSys);
             
             
         } catch (IOException ex) {
@@ -45,8 +45,31 @@ public class MonitorProcess {
         }
     }
 
-    private static void enviarCorreo(String info, Properties properties) {
-        Email email = new SimpleEmail();
+    private static void enviarCorreo(String info, Properties properties) throws EmailException {
+        HtmlEmail email = new HtmlEmail();
         EncriptacionTexto encriptacionTexto = new EncriptacionTexto();
+        
+        try {
+            LOGGER.debug("bteniendo los datos del correo");
+            email.setHostName(encriptacionTexto.getTextoDesencriptado(properties.getProperty("srEmName")));
+            email.setSmtpPort(
+                    Integer.parseInt(encriptacionTexto.getTextoDesencriptado(properties.getProperty("srEmPort")))
+            );
+            email.setAuthentication(
+                    encriptacionTexto.getTextoDesencriptado(properties.getProperty("srEmU")),
+                    encriptacionTexto.getTextoDesencriptado(properties.getProperty("srEmPs"))
+            );
+            email.setSSLOnConnect(true);
+            email.setFrom(encriptacionTexto.getTextoDesencriptado(properties.getProperty("srEmFrom")));
+            email.setSubject(properties.getProperty("TituloE"));
+            email.setHtmlMsg(info);
+            email.setMsg(properties.getProperty("textoE"));
+            email.addTo(properties.getProperty("srTo"));
+            LOGGER.debug("Enviando el correo electronico");
+            email.send();
+        } catch (EmailException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            throw new EmailException(ex);
+        }
     }
 }
